@@ -1,13 +1,24 @@
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import SecondaryLink from "../../components/SecondaryLink";
+import red from "@mui/material/colors/red";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { useState } from "react";
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const { login } = useAuth();
+
+  const navigate = useNavigate();
+
   const validationSchema = yup.object({
     email: yup
       .string("Enter your email")
@@ -22,8 +33,17 @@ const Login = () => {
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        setError(null);
+        setIsLoading(true);
+        let user = await login(values.email, values.password);
+        setIsLoading(false);
+        if (user) navigate("/dashboard");
+      } catch (e) {
+        setError("This user is not found!");
+        setIsLoading(false);
+      }
     },
   });
 
@@ -64,12 +84,21 @@ const Login = () => {
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
             />
+            {error && (
+              <Typography variant="string" color={red[400]} fontSize="15px">
+                {error}
+              </Typography>
+            )}
           </Stack>
 
           <Stack gap={3} sx={{ marginTop: "40px" }}>
-            <Button variant="contained" type="submit">
+            <LoadingButton
+              loading={isLoading}
+              variant="contained"
+              type="submit"
+            >
               Login
-            </Button>
+            </LoadingButton>
 
             <SecondaryLink to="/register">Create an account?</SecondaryLink>
           </Stack>
