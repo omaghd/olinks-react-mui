@@ -1,13 +1,20 @@
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Grid from "@mui/material/Grid";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import SecondaryLink from "../../components/SecondaryLink";
+import red from "@mui/material/colors/red";
+import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 const Register = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { signup, errors } = useAuth();
+
   const validationSchema = yup.object({
     username: yup
       .string("Enter your username")
@@ -26,8 +33,10 @@ const Register = () => {
   const formik = useFormik({
     initialValues: { email: "", username: "", password: "" },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      setIsLoading(true);
+      await signup(values.username, values.email, values.password);
+      setIsLoading(false);
     },
   });
 
@@ -77,12 +86,27 @@ const Register = () => {
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
             />
+            {errors &&
+              errors.map((error) => (
+                <Typography
+                  key={error}
+                  variant="string"
+                  color={red[400]}
+                  fontSize="15px"
+                >
+                  {error}
+                </Typography>
+              ))}
           </Stack>
 
           <Stack gap={3} sx={{ marginTop: "40px" }}>
-            <Button variant="contained" type="submit">
+            <LoadingButton
+              loading={isLoading}
+              variant="contained"
+              type="submit"
+            >
               Register
-            </Button>
+            </LoadingButton>
 
             <SecondaryLink to="/login">Do you have an account?</SecondaryLink>
           </Stack>

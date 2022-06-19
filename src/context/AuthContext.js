@@ -3,13 +3,82 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../config/firebase";
+import { auth, db } from "../config/firebase";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  Timestamp,
+  where,
+} from "firebase/firestore";
+import axios from "axios";
 
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [errors, setErrors] = useState([]);
+
+  const signup = async (username, email, password) => {
+    setErrors([]);
+
+    await checkUsername(username);
+
+    try {
+      let data = await createUserWithEmailAndPassword(auth, email, password);
+      if (!data) throw new Error("Could not complete the signup");
+      await addUserDoc(data.user, username);
+    } catch (e) {
+      if (e.message === "Firebase: Error (auth/email-already-in-use).")
+        setErrors((prevError) => [
+          ...prevError,
+          "This email is already in use",
+        ]);
+    }
+  };
+
+  const checkUsername = async (username) => {
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("username", "==", username)
+      );
+      const users = await getDocs(q);
+      if (users.docs.length > 0)
+        throw new Error("This username already exists!");
+    } catch (e) {
+      setErrors((prevError) => [...prevError, e.message]);
+    }
+  };
+
+  const addUserDoc = async (user, username) => {
+    try {
+      let geo = await getGeo();
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        username: username,
+        email: user.email,
+        backgroundColor: "white",
+        textColor: "black",
+        displayVisits: false,
+        isVisible: false,
+        createdAt: Timestamp.now(),
+        userAgent: navigator.userAgent,
+        geo,
+      });
+    } catch (e) {
+      setErrors((prevError) => [...prevError, e.message]);
+    }
+  };
+
+  const getGeo = async () => {
+    const res = await axios.get("http://ip-api.com/json/");
+    return res.data;
+  };
 
   const login = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
@@ -29,7 +98,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ login, user, logout }}>
+    <AuthContext.Provider value={{ login, signup, user, logout, errors }}>
       {children}
     </AuthContext.Provider>
   );
