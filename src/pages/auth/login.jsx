@@ -7,17 +7,13 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import SecondaryLink from "../../components/SecondaryLink";
 import red from "@mui/material/colors/red";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  const { login } = useAuth();
-
-  const navigate = useNavigate();
+  const { login, errors } = useAuth();
 
   const validationSchema = yup.object({
     email: yup
@@ -34,16 +30,9 @@ const Login = () => {
     initialValues: { email: "", password: "" },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      try {
-        setError(null);
-        setIsLoading(true);
-        let user = await login(values.email, values.password);
-        setIsLoading(false);
-        if (user) navigate("/dashboard");
-      } catch (e) {
-        setError("This user is not found!");
-        setIsLoading(false);
-      }
+      setIsLoading(true);
+      await login(values.email, values.password);
+      setIsLoading(false);
     },
   });
 
@@ -84,11 +73,17 @@ const Login = () => {
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
             />
-            {error && (
-              <Typography variant="string" color={red[400]} fontSize="15px">
-                {error}
-              </Typography>
-            )}
+            {errors &&
+              errors.map((error) => (
+                <Typography
+                  key={error}
+                  variant="string"
+                  color={red[400]}
+                  fontSize="15px"
+                >
+                  {error}
+                </Typography>
+              ))}
           </Stack>
 
           <Stack gap={3} sx={{ marginTop: "40px" }}>

@@ -36,7 +36,7 @@ export const AuthContextProvider = ({ children }) => {
       if (e.message === "Firebase: Error (auth/email-already-in-use).")
         setErrors((prevError) => [
           ...prevError,
-          "This email is already in use",
+          "This email is already in use!",
         ]);
     }
   };
@@ -80,8 +80,18 @@ export const AuthContextProvider = ({ children }) => {
     return res.data;
   };
 
-  const login = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const login = async (email, password) => {
+    setErrors([]);
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (e) {
+      if (e.message === "Firebase: Error (auth/user-not-found).")
+        e.message = "User not found!";
+      else if (e.message === "Firebase: Error (auth/wrong-password).")
+        e.message = "Wrong password!";
+      setErrors((prevError) => [...prevError, e.message]);
+    }
   };
 
   const logout = () => {
