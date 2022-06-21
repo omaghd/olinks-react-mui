@@ -5,6 +5,7 @@ import Dashboard from "./pages/dashboard";
 import AuthLayout from "./layout/AuthLayout";
 import { AuthContextProvider } from "./context/AuthContext";
 import RequireAuth from "./components/RequireAuth";
+import DashboardLayout from "./layout/DashboardLayout";
 
 const App = () => (
   <AuthContextProvider>
@@ -16,7 +17,9 @@ const App = () => (
           <Route path="/register" element={<Register />} />
         </Route>
         <Route element={<RequireAuth />}>
-          <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />}></Route>
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
