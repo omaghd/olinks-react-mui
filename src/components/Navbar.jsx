@@ -8,13 +8,15 @@ import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
-
 import IconButton from "@mui/material/IconButton";
+
+import MenuIcon from "@mui/icons-material/Menu";
 
 import { Link } from "react-router-dom";
 
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import MobileSidebar from "./MobileSidebar";
 
 const userItems = [
   { name: "Profile", link: "/profile" },
@@ -22,6 +24,7 @@ const userItems = [
 ];
 
 const Navbar = () => {
+  const [openSidebar, setOpenSidebar] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const { user, logout } = useAuth();
@@ -36,8 +39,22 @@ const Navbar = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <MobileSidebar
+        openSidebar={openSidebar}
+        setOpenSidebar={setOpenSidebar}
+      />
+
       <AppBar position="static">
         <Toolbar>
+          {user && (
+            <IconButton
+              onClick={() => setOpenSidebar(true)}
+              color="inherit"
+              sx={{ display: { xs: "block", sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography
             fontWeight={300}
             variant="h6"
