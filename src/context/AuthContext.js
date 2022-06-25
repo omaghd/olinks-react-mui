@@ -61,7 +61,6 @@ export const AuthContextProvider = ({ children }) => {
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         username: username,
-        email: user.email,
         backgroundColor: "white",
         textColor: "black",
         displayVisits: false,
@@ -69,6 +68,7 @@ export const AuthContextProvider = ({ children }) => {
         createdAt: Timestamp.now(),
         userAgent: navigator.userAgent,
         geo,
+        bio: "",
       });
     } catch (e) {
       setErrors((prevError) => [...prevError, e.message]);
