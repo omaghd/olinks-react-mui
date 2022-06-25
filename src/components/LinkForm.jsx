@@ -28,7 +28,7 @@ const Actions = styled(CardActions)({
   alignItems: "center",
 });
 
-const LinkForm = () => {
+const LinkForm = ({ link }) => {
   return (
     <Card>
       <CardContent>
@@ -36,13 +36,13 @@ const LinkForm = () => {
           <CardHeader>
             <Chip
               icon={<VisibilityIcon />}
-              label="0 Views"
+              label={`${link.views} Views`}
               variant="outlined"
             />
-            <Switch color="success" />
+            <Switch color="success" checked={link.isVisible} />
           </CardHeader>
-          <TextField label="Title" variant="filled" />
-          <TextField label="Link" variant="filled" />
+          <TextField label="Title" value={link.title} variant="filled" />
+          <TextField label="Link" value={link.url} variant="filled" />
         </Stack>
       </CardContent>
       <Actions>
