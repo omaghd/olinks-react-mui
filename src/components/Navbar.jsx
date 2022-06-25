@@ -4,31 +4,38 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import LoadingButton from "@mui/lab/LoadingButton";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Divider from "@mui/material/Divider";
+
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+
 import { Link } from "react-router-dom";
-import MobileMenu from "./MobileMenu";
+
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
-const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+const userItems = [
+  { name: "Profile", link: "/profile" },
+  { name: "Settings", link: "/settings" },
+];
 
-  const [isLoading, setIsLoading] = useState(false);
+const Navbar = () => {
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const { user, logout } = useAuth();
 
-  const handleLogout = async () => {
-    setIsLoading(true);
-    await logout();
-    setIsLoading(false);
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <MobileMenu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-
       <AppBar position="static">
         <Toolbar>
           <Typography
@@ -39,19 +46,44 @@ const Navbar = () => {
           >
             OLinks
           </Typography>
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
+          <Stack direction="row" spacing={1}>
             {user ? (
-              <LoadingButton
-                loading={isLoading}
-                color="inherit"
-                onClick={handleLogout}
-              >
-                Logout
-              </LoadingButton>
+              <Box sx={{ flexGrow: 0 }}>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt={user.displayName}
+                    src={user.photoURL}
+                    sx={{
+                      width: { xs: 30, sm: 45 },
+                      height: { xs: 30, sm: 45 },
+                    }}
+                  />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {userItems.map((item) => (
+                    <MenuItem key={item.link} component={Link} to={item.link}>
+                      <Typography textAlign="center">{item.name}</Typography>
+                    </MenuItem>
+                  ))}
+                  <Divider />
+                  <MenuItem onClick={logout}>
+                    <Typography textAlign="center">Logout</Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
             ) : (
               <>
                 <Button
@@ -68,13 +100,6 @@ const Navbar = () => {
               </>
             )}
           </Stack>
-          <IconButton
-            onClick={() => setMenuOpen(true)}
-            color="inherit"
-            sx={{ display: { xs: "block", sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
         </Toolbar>
       </AppBar>
     </Box>
