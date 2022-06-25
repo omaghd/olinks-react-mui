@@ -13,6 +13,8 @@ import LinkIcon from "@mui/icons-material/Link";
 
 import { useAuth } from "../context/AuthContext";
 
+import { Link } from "react-router-dom";
+
 const userItems = [
   { icon: <LinkIcon />, name: "Links", link: "/dashboard" },
   { icon: <AccountCircleIcon />, name: "Profile", link: "/profile" },
@@ -27,7 +29,7 @@ const Sidebar = () => {
       <List>
         {userItems.map((item) => (
           <ListItem key={item.name} disablePadding>
-            <ListItemButton>
+            <ListItemButton component={Link} to={item.link}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.name} />
             </ListItemButton>
