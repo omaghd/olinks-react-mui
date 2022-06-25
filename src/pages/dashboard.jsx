@@ -1,5 +1,7 @@
+import Box from "@mui/material/Box";
+
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  return <Box flex={10}>Dashboard</Box>;
 };
 
 export default Dashboard;
