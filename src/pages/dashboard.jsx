@@ -1,15 +1,16 @@
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
+import NewLinkButton from "../components/NewLinkButton";
 import Links from "../components/Links";
-import LinksActions from "../components/LinksActions";
+
 import { LinksContextProvider } from "../context/LinksContext";
 
 const Dashboard = () => {
   return (
     <LinksContextProvider>
       <Box flex={10} p={1}>
-        <LinksActions />
+        <NewLinkButton />
 
         <Stack spacing={3}>
           <Links />
