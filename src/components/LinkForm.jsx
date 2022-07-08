@@ -15,7 +15,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import styled from "@emotion/styled";
-import { useEffect } from "react";
+
+import { useEffect, useRef } from "react";
 import { useLinks } from "../context/LinksContext";
 
 const CardHeader = styled(Stack)({
@@ -31,11 +32,16 @@ const Actions = styled(CardActions)({
 });
 
 const LinkForm = ({ link }) => {
-  const { links, setLinks, updateLink, deleteLink } = useLinks();
+  const { setLinks, updateLink, deleteLink } = useLinks();
+
+  const shouldUpdate = useRef(false);
 
   useEffect(() => {
-    updateLink(link);
-  }, [links, link, updateLink]);
+    if (shouldUpdate.current) {
+      updateLink(link);
+      shouldUpdate.current = false;
+    }
+  }, [link, updateLink]);
 
   const onTitleChange = async (e) => {
     setLinks((prevLinks) => {
@@ -43,6 +49,7 @@ const LinkForm = ({ link }) => {
         l.id === link.id ? { ...l, title: e.target.value } : l
       );
     });
+    shouldUpdate.current = true;
   };
 
   const onUrlChange = async (e) => {
@@ -51,15 +58,16 @@ const LinkForm = ({ link }) => {
         l.id === link.id ? { ...l, url: e.target.value } : l
       );
     });
+    shouldUpdate.current = true;
   };
 
   const onVisibleChange = async () => {
-    console.log("hh");
     setLinks((prevLinks) => {
       return prevLinks.map((l) =>
         l.id === link.id ? { ...l, isVisible: !l.isVisible } : l
       );
     });
+    shouldUpdate.current = true;
   };
 
   return (
