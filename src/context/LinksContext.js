@@ -1,12 +1,34 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { db } from "../config/firebase";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  query,
+  onSnapshot,
+  addDoc,
+  serverTimestamp,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 
 const LinksContext = createContext();
 
 export const LinksContextProvider = ({ children }) => {
   const [links, setLinks] = useState([]);
-  const [errors, setErrors] = useState([]);
+
+  const addEmptyLink = async () => {
+    await addDoc(collection(db, "links"), {
+      title: "",
+      url: "",
+      views: 0,
+      isVisible: false,
+      createdAt: serverTimestamp(),
+    });
+  };
+
+  const updateLink = async (link) => {
+    const linkRef = doc(db, "links", link.id);
+    await updateDoc(linkRef, link);
+  };
 
   useEffect(() => {
     const q = query(collection(db, "links"));
@@ -26,7 +48,9 @@ export const LinksContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <LinksContext.Provider value={{ links, errors }}>
+    <LinksContext.Provider
+      value={{ links, addEmptyLink, setLinks, updateLink }}
+    >
       {children}
     </LinksContext.Provider>
   );

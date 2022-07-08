@@ -15,6 +15,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import styled from "@emotion/styled";
+import { useEffect } from "react";
+import { useLinks } from "../context/LinksContext";
 
 const CardHeader = styled(Stack)({
   flexDirection: "row",
@@ -29,6 +31,37 @@ const Actions = styled(CardActions)({
 });
 
 const LinkForm = ({ link }) => {
+  const { links, setLinks, updateLink } = useLinks();
+
+  useEffect(() => {
+    updateLink(link);
+  }, [links, link, updateLink]);
+
+  const onTitleChange = async (e) => {
+    setLinks((prevLinks) => {
+      return prevLinks.map((l) =>
+        l.id === link.id ? { ...l, title: e.target.value } : l
+      );
+    });
+  };
+
+  const onUrlChange = async (e) => {
+    setLinks((prevLinks) => {
+      return prevLinks.map((l) =>
+        l.id === link.id ? { ...l, url: e.target.value } : l
+      );
+    });
+  };
+
+  const onVisibleChange = async () => {
+    console.log("hh");
+    setLinks((prevLinks) => {
+      return prevLinks.map((l) =>
+        l.id === link.id ? { ...l, isVisible: !l.isVisible } : l
+      );
+    });
+  };
+
   return (
     <Card>
       <CardContent>
@@ -39,10 +72,24 @@ const LinkForm = ({ link }) => {
               label={`${link.views} Views`}
               variant="outlined"
             />
-            <Switch color="success" checked={link.isVisible} />
+            <Switch
+              color="success"
+              checked={link.isVisible}
+              onChange={onVisibleChange}
+            />
           </CardHeader>
-          <TextField label="Title" value={link.title} variant="filled" />
-          <TextField label="Link" value={link.url} variant="filled" />
+          <TextField
+            label="Title"
+            value={link.title}
+            variant="filled"
+            onChange={(e) => onTitleChange(e)}
+          />
+          <TextField
+            label="Link"
+            value={link.url}
+            variant="filled"
+            onChange={(e) => onUrlChange(e)}
+          />
         </Stack>
       </CardContent>
       <Actions>

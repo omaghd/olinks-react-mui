@@ -4,8 +4,11 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 import SaveIcon from "@mui/icons-material/Save";
 import LinkIcon from "@mui/icons-material/Link";
+import { useLinks } from "../context/LinksContext";
 
 const LinksActions = () => {
+  const { addEmptyLink } = useLinks();
+
   return (
     <SpeedDial
       ariaLabel="Navigation speed dial"
@@ -20,7 +23,7 @@ const LinksActions = () => {
       <SpeedDialAction
         icon={<LinkIcon />}
         tooltipTitle="New Link"
-        onClick={() => console.log("OK")}
+        onClick={addEmptyLink}
       />
     </SpeedDial>
   );

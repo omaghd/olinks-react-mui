@@ -12,7 +12,7 @@ import {
   getDocs,
   query,
   setDoc,
-  Timestamp,
+  serverTimestamp,
   where,
 } from "firebase/firestore";
 import axios from "axios";
@@ -65,7 +65,7 @@ export const AuthContextProvider = ({ children }) => {
         textColor: "black",
         displayVisits: false,
         isVisible: false,
-        createdAt: Timestamp.now(),
+        createdAt: serverTimestamp(),
         userAgent: navigator.userAgent,
         geo,
         bio: "",
