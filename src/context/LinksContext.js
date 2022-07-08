@@ -5,9 +5,10 @@ import {
   query,
   onSnapshot,
   addDoc,
-  serverTimestamp,
   updateDoc,
   doc,
+  Timestamp,
+  deleteDoc,
 } from "firebase/firestore";
 
 const LinksContext = createContext();
@@ -21,13 +22,17 @@ export const LinksContextProvider = ({ children }) => {
       url: "",
       views: 0,
       isVisible: false,
-      createdAt: serverTimestamp(),
+      createdAt: Timestamp.now(),
     });
   };
 
   const updateLink = async (link) => {
     const linkRef = doc(db, "links", link.id);
     await updateDoc(linkRef, link);
+  };
+
+  const deleteLink = async (link) => {
+    await deleteDoc(doc(db, "links", link.id));
   };
 
   useEffect(() => {
@@ -49,7 +54,7 @@ export const LinksContextProvider = ({ children }) => {
 
   return (
     <LinksContext.Provider
-      value={{ links, addEmptyLink, setLinks, updateLink }}
+      value={{ links, addEmptyLink, setLinks, updateLink, deleteLink }}
     >
       {children}
     </LinksContext.Provider>

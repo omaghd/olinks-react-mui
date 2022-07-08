@@ -31,7 +31,7 @@ const Actions = styled(CardActions)({
 });
 
 const LinkForm = ({ link }) => {
-  const { links, setLinks, updateLink } = useLinks();
+  const { links, setLinks, updateLink, deleteLink } = useLinks();
 
   useEffect(() => {
     updateLink(link);
@@ -107,7 +107,7 @@ const LinkForm = ({ link }) => {
         </Box>
         <Box>
           <Tooltip title="Delete">
-            <IconButton size="large">
+            <IconButton size="large" onClick={() => deleteLink(link)}>
               <DeleteIcon color="error" />
             </IconButton>
           </Tooltip>
