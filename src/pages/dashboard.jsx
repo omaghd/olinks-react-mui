@@ -17,9 +17,13 @@ const Dashboard = () => {
           <Stack spacing={2} flex={6}>
             <Links />
           </Stack>
-          <Box flex={6}>
+          <Stack
+            flex={6}
+            alignItems="center"
+            sx={{ display: { xs: "none", md: "flex" } }}
+          >
             <PreviewLinks />
-          </Box>
+          </Stack>
         </Stack>
       </Box>
     </LinksContextProvider>

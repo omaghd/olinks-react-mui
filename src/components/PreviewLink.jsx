@@ -1,24 +1,31 @@
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import ButtonBase from "@mui/material/ButtonBase";
+import Button from "@mui/material/Button";
+import styled from "@emotion/styled";
+
+const Link = styled(Button)((props) => ({
+  borderColor: props.border,
+  borderRadius: 1,
+  color: props.text,
+  display: "inline-block",
+  wordWrap: "break-word",
+  ":hover": {
+    borderColor: props.border,
+  },
+}));
 
 const PreviewLink = ({ link, textColor }) => {
   return (
-    <ButtonBase>
-      <Box
-        component="a"
-        href={link.url}
-        target="_blank"
-        sx={{ textDecoration: "none", wordWrap: "break-word" }}
-        border={2}
-        borderColor={textColor}
-        borderRadius={1}
-        p={1}
-        width="100%"
-      >
-        <Typography color={textColor}>{link.title}</Typography>
-      </Box>
-    </ButtonBase>
+    <Link
+      variant="outlined"
+      href={link.url}
+      target="_blank"
+      text={textColor}
+      border={textColor}
+      p={1}
+      width="100%"
+    >
+      <Typography>{link.title}</Typography>
+    </Link>
   );
 };
 

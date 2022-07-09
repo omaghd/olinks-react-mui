@@ -20,7 +20,6 @@ const PreviewLinks = () => {
       border={10}
       bgcolor={profile?.backgroundColor}
       borderRadius={10}
-      mx={20}
       py={5}
       px={1}
       minHeight="450px"
@@ -29,7 +28,6 @@ const PreviewLinks = () => {
       maxWidth="250px"
       className="preview"
       alignItems="center"
-      sx={{ position: "fixed" }}
     >
       <Stack alignItems="center" justifyContent="center" spacing={1} mb={3}>
         <Avatar
