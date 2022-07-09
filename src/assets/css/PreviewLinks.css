@@ -1,0 +1,9 @@
+.preview::-webkit-scrollbar {
+    display: none;
+}
+
+.preview {
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

@@ -5,6 +5,7 @@ import NewLinkButton from "../components/NewLinkButton";
 import Links from "../components/Links";
 
 import { LinksContextProvider } from "../context/LinksContext";
+import PreviewLinks from "../components/PreviewLinks";
 
 const Dashboard = () => {
   return (
@@ -12,8 +13,13 @@ const Dashboard = () => {
       <Box flex={10} p={1}>
         <NewLinkButton />
 
-        <Stack spacing={3}>
-          <Links />
+        <Stack direction="row" spacing={3}>
+          <Stack spacing={2} flex={6}>
+            <Links />
+          </Stack>
+          <Box flex={6}>
+            <PreviewLinks />
+          </Box>
         </Stack>
       </Box>
     </LinksContextProvider>

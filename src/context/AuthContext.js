@@ -10,6 +10,7 @@ import {
   collection,
   doc,
   getDocs,
+  onSnapshot,
   query,
   setDoc,
   Timestamp,
@@ -22,6 +23,7 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [errors, setErrors] = useState([]);
+  const [profile, setProfile] = useState(null);
 
   const signup = async (username, email, password) => {
     setErrors([]);
@@ -107,8 +109,22 @@ export const AuthContextProvider = ({ children }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      doc(db, "users", auth.currentUser.uid),
+      (doc) => {
+        setProfile(doc.data());
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ login, signup, user, logout, errors }}>
+    <AuthContext.Provider
+      value={{ login, signup, user, logout, errors, profile }}
+    >
       {children}
     </AuthContext.Provider>
   );
