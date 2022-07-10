@@ -22,10 +22,10 @@ const PreviewLinks = () => {
       borderRadius={10}
       py={5}
       px={1}
-      minHeight="450px"
-      maxHeight="450px"
-      minWidth="250px"
-      maxWidth="250px"
+      minHeight="400px"
+      maxHeight="400px"
+      minWidth="200px"
+      maxWidth="200px"
       className="preview"
       alignItems="center"
     >

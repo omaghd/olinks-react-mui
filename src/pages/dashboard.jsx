@@ -1,16 +1,28 @@
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import Fab from "@mui/material/Fab";
 
 import NewLinkButton from "../components/NewLinkButton";
 import Links from "../components/Links";
-
-import { LinksContextProvider } from "../context/LinksContext";
 import PreviewLinks from "../components/PreviewLinks";
 
+import { LinksContextProvider } from "../context/LinksContext";
+
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useState } from "react";
+import MobilePreviewLinks from "../components/MobilePreviewLinks";
+
+const FabStyle = {
+  bottom: 20,
+  position: "fixed",
+};
+
 const Dashboard = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <LinksContextProvider>
-      <Box flex={10} p={1}>
+      <Box flex={10} p={1} pb={10}>
         <NewLinkButton />
 
         <Stack direction="row" spacing={3}>
@@ -25,6 +37,21 @@ const Dashboard = () => {
             <PreviewLinks />
           </Stack>
         </Stack>
+
+        <Stack alignItems="center" sx={{ display: { xs: "flex", md: "none" } }}>
+          <Fab
+            variant="extended"
+            size="small"
+            color="primary"
+            style={FabStyle}
+            onClick={() => setIsOpen(true)}
+          >
+            <VisibilityIcon sx={{ mr: 1 }} />
+            Preview
+          </Fab>
+        </Stack>
+
+        <MobilePreviewLinks isOpen={isOpen} setIsOpen={setIsOpen} />
       </Box>
     </LinksContextProvider>
   );
