@@ -26,10 +26,51 @@ import PasswordIcon from "@mui/icons-material/Password";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 
-const Settings = () => {
-  const { profile } = useAuth();
+import { useFormik } from "formik";
+import * as yup from "yup";
+
+import { SnackbarProvider, useSnackbar } from "notistack";
+
+const SettingsForm = () => {
+  const { profile, updateSettings } = useAuth();
 
   const [value, setValue] = useState("1");
+
+  const [isLoadingGeneral, setIsLoadingGeneral] = useState(false);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const validationGeneral = yup.object({
+    textColor: yup
+      .string("Enter a text color")
+      .required("Text color is required"),
+    backgroundColor: yup
+      .string("Enter a background color")
+      .required("Background color is required"),
+  });
+
+  const formikGeneral = useFormik({
+    initialValues: {
+      textColor: profile?.textColor ?? "",
+      backgroundColor: profile?.backgroundColor ?? "",
+      isVisible: profile?.isVisible,
+      displayVisits: profile?.displayVisits,
+    },
+    validationSchema: validationGeneral,
+    onSubmit: async (values) => {
+      setIsLoadingGeneral(true);
+      await updateSettings(values);
+      enqueueSnackbar("Settings updated successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          horizontal: "right",
+          vertical: "bottom",
+        },
+        autoHideDuration: 3000,
+      });
+      setIsLoadingGeneral(false);
+    },
+  });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -76,45 +117,80 @@ const Settings = () => {
             </Box>
 
             <TabPanel value="1">
-              <Stack spacing={2} mb={3}>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Switch checked={profile?.isVisible} />}
-                    label="Active"
-                    labelPlacement="end"
+              <form onSubmit={formikGeneral.handleSubmit}>
+                <Stack spacing={2} mb={3}>
+                  <FormGroup>
+                    <FormControlLabel
+                      name="isVisible"
+                      control={
+                        <Switch
+                          checked={formikGeneral.values.isVisible}
+                          onChange={formikGeneral.handleChange}
+                        />
+                      }
+                      label="Active"
+                      labelPlacement="end"
+                    />
+
+                    <FormControlLabel
+                      name="displayVisits"
+                      control={
+                        <Switch
+                          checked={formikGeneral.values.displayVisits}
+                          onChange={formikGeneral.handleChange}
+                        />
+                      }
+                      label="Display views counter"
+                      labelPlacement="end"
+                    />
+                  </FormGroup>
+
+                  <TextField
+                    label="Text Color"
+                    variant="filled"
+                    fullWidth
+                    name="textColor"
+                    value={formikGeneral.values.textColor}
+                    onChange={formikGeneral.handleChange}
+                    error={
+                      formikGeneral.touched.textColor &&
+                      Boolean(formikGeneral.errors.textColor)
+                    }
+                    helperText={
+                      formikGeneral.touched.textColor &&
+                      formikGeneral.errors.textColor
+                    }
                   />
 
-                  <FormControlLabel
-                    control={<Switch checked={profile?.displayVisits} />}
-                    label="Display views counter"
-                    labelPlacement="end"
+                  <TextField
+                    label="Background Color"
+                    variant="filled"
+                    fullWidth
+                    name="backgroundColor"
+                    value={formikGeneral.values.backgroundColor}
+                    onChange={formikGeneral.handleChange}
+                    error={
+                      formikGeneral.touched.backgroundColor &&
+                      Boolean(formikGeneral.errors.backgroundColor)
+                    }
+                    helperText={
+                      formikGeneral.touched.backgroundColor &&
+                      formikGeneral.errors.backgroundColor
+                    }
                   />
-                </FormGroup>
+                </Stack>
 
-                <TextField
-                  label="Text Color"
-                  variant="filled"
-                  fullWidth
-                  value={profile?.textColor ?? ""}
-                />
-
-                <TextField
-                  label="Background Color"
-                  variant="filled"
-                  fullWidth
-                  value={profile?.backgroundColor ?? ""}
-                />
-              </Stack>
-
-              <LoadingButton
-                loading={false}
-                loadingPosition="start"
-                startIcon={<EditIcon />}
-                variant="contained"
-                size="large"
-              >
-                Update
-              </LoadingButton>
+                <LoadingButton
+                  loading={isLoadingGeneral}
+                  loadingPosition="start"
+                  startIcon={<EditIcon />}
+                  variant="contained"
+                  size="large"
+                  type="submit"
+                >
+                  Update
+                </LoadingButton>
+              </form>
             </TabPanel>
 
             <TabPanel value="2">
@@ -187,4 +263,11 @@ const Settings = () => {
   );
 };
 
+const Settings = () => {
+  return (
+    <SnackbarProvider maxSnack={3}>
+      <SettingsForm />
+    </SnackbarProvider>
+  );
+};
 export default Settings;

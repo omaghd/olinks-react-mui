@@ -14,6 +14,7 @@ import {
   query,
   setDoc,
   Timestamp,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import axios from "axios";
@@ -100,6 +101,16 @@ export const AuthContextProvider = ({ children }) => {
     return signOut(auth);
   };
 
+  const updateSettings = async (settings) => {
+    const userRef = doc(db, "users", auth.currentUser.uid);
+    await updateDoc(userRef, {
+      textColor: settings.textColor,
+      backgroundColor: settings.backgroundColor,
+      isVisible: settings.isVisible,
+      displayVisits: settings.displayVisits,
+    });
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -123,7 +134,7 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ login, signup, user, logout, errors, profile }}
+      value={{ login, signup, user, logout, errors, profile, updateSettings }}
     >
       {children}
     </AuthContext.Provider>
