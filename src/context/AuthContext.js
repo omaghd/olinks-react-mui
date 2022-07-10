@@ -4,6 +4,7 @@ import {
   signOut,
   onAuthStateChanged,
   createUserWithEmailAndPassword,
+  updatePassword as updatePasswordFirebase,
 } from "firebase/auth";
 import { auth, db } from "../config/firebase";
 import {
@@ -111,6 +112,33 @@ export const AuthContextProvider = ({ children }) => {
     });
   };
 
+  const checkUser = async (email, password) => {
+    let valid;
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        valid = true;
+      })
+      .catch((error) => {
+        valid = false;
+      });
+
+    return valid;
+  };
+
+  const updatePassword = async (currentPassword, newPassword) => {
+    let valid = await checkUser(auth.currentUser.email, currentPassword);
+
+    let updated = false;
+
+    if (valid) {
+      await updatePasswordFirebase(auth.currentUser, newPassword).then(() => {
+        updated = true;
+      });
+    }
+
+    return updated;
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -121,20 +149,31 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      doc(db, "users", auth.currentUser.uid),
-      (doc) => {
-        setProfile(doc.data());
-      }
-    );
-    return () => {
-      unsubscribe();
-    };
+    if (auth.currentUser) {
+      const unsubscribe = onSnapshot(
+        doc(db, "users", auth.currentUser.uid),
+        (doc) => {
+          setProfile(doc.data());
+        }
+      );
+      return () => {
+        unsubscribe();
+      };
+    }
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ login, signup, user, logout, errors, profile, updateSettings }}
+      value={{
+        login,
+        signup,
+        user,
+        logout,
+        errors,
+        profile,
+        updateSettings,
+        updatePassword,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -19,6 +19,7 @@ import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
+import FormHelperText from "@mui/material/FormHelperText";
 
 import EditIcon from "@mui/icons-material/Edit";
 import PasswordIcon from "@mui/icons-material/Password";
@@ -31,12 +32,13 @@ import * as yup from "yup";
 
 import { SnackbarProvider, useSnackbar } from "notistack";
 
-const SettingsForm = () => {
-  const { profile, updateSettings } = useAuth();
+const SettingsForms = () => {
+  const { profile, updateSettings, updatePassword } = useAuth();
 
   const [value, setValue] = useState("1");
 
   const [isLoadingGeneral, setIsLoadingGeneral] = useState(false);
+  const [isLoadingPassword, setIsLoadingPassword] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -69,6 +71,52 @@ const SettingsForm = () => {
         autoHideDuration: 3000,
       });
       setIsLoadingGeneral(false);
+    },
+  });
+
+  const validationPassword = yup.object({
+    currentPassword: yup
+      .string("Enter a password")
+      .required("Current password is required")
+      .min(8, "Password must be at least 8 characters long"),
+    newPassword: yup
+      .string("Enter a password")
+      .required("New password is required")
+      .min(8, "Password must be at least 8 characters long"),
+  });
+
+  const formikPassword = useFormik({
+    initialValues: {
+      currentPassword: "",
+      newPassword: "",
+    },
+    validationSchema: validationPassword,
+    onSubmit: async (values) => {
+      setIsLoadingPassword(true);
+      let done = await updatePassword(
+        values.currentPassword,
+        values.newPassword
+      );
+      console.log(done);
+      if (done)
+        enqueueSnackbar("Password updated successfully!", {
+          variant: "success",
+          anchorOrigin: {
+            horizontal: "right",
+            vertical: "bottom",
+          },
+          autoHideDuration: 3000,
+        });
+      else
+        enqueueSnackbar("Wrong current password!", {
+          variant: "error",
+          anchorOrigin: {
+            horizontal: "right",
+            vertical: "bottom",
+          },
+          autoHideDuration: 3000,
+        });
+      setIsLoadingPassword(false);
     },
   });
 
@@ -194,67 +242,94 @@ const SettingsForm = () => {
             </TabPanel>
 
             <TabPanel value="2">
-              <Stack spacing={2} mb={3}>
-                <FormControl variant="outlined">
-                  <InputLabel htmlFor="current-password">
-                    Current Password
-                  </InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    id="current-password"
-                    type={values.showCurrentPassword ? "text" : "password"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={handleClickShowCurrentPassword}
-                          edge="end"
-                        >
-                          {values.showCurrentPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Current Password"
-                  />
-                </FormControl>
+              <form onSubmit={formikPassword.handleSubmit}>
+                <Stack spacing={2} mb={3}>
+                  <FormControl variant="outlined">
+                    <InputLabel htmlFor="current-password">
+                      Current Password
+                    </InputLabel>
+                    <OutlinedInput
+                      fullWidth
+                      id="current-password"
+                      type={values.showCurrentPassword ? "text" : "password"}
+                      name="currentPassword"
+                      onChange={formikPassword.handleChange}
+                      error={
+                        formikPassword.touched.currentPassword &&
+                        Boolean(formikPassword.errors.currentPassword)
+                      }
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={handleClickShowCurrentPassword}
+                            edge="end"
+                          >
+                            {values.showCurrentPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      label="Current Password"
+                    />
+                    {formikPassword.touched.currentPassword &&
+                      formikPassword.errors.currentPassword && (
+                        <FormHelperText error>
+                          {formikPassword.errors.currentPassword}
+                        </FormHelperText>
+                      )}
+                  </FormControl>
 
-                <FormControl variant="outlined">
-                  <InputLabel htmlFor="new-password">New Password</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    id="new-password"
-                    type={values.showNewPassword ? "text" : "password"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={handleClickShowNewPassword}
-                          edge="end"
-                        >
-                          {values.showNewPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="New Password"
-                  />
-                </FormControl>
-              </Stack>
+                  <FormControl variant="outlined">
+                    <InputLabel htmlFor="new-password">New Password</InputLabel>
+                    <OutlinedInput
+                      fullWidth
+                      id="new-password"
+                      type={values.showNewPassword ? "text" : "password"}
+                      name="newPassword"
+                      onChange={formikPassword.handleChange}
+                      error={
+                        formikPassword.touched.newPassword &&
+                        Boolean(formikPassword.errors.newPassword)
+                      }
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={handleClickShowNewPassword}
+                            edge="end"
+                          >
+                            {values.showNewPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      label="New Password"
+                    />
+                    {formikPassword.touched.newPassword &&
+                      formikPassword.errors.newPassword && (
+                        <FormHelperText error>
+                          {formikPassword.errors.newPassword}
+                        </FormHelperText>
+                      )}
+                  </FormControl>
+                </Stack>
 
-              <LoadingButton
-                loading={false}
-                loadingPosition="start"
-                startIcon={<PasswordIcon />}
-                variant="contained"
-                size="large"
-              >
-                Change
-              </LoadingButton>
+                <LoadingButton
+                  loading={isLoadingPassword}
+                  loadingPosition="start"
+                  startIcon={<PasswordIcon />}
+                  variant="contained"
+                  size="large"
+                  type="submit"
+                >
+                  Change
+                </LoadingButton>
+              </form>
             </TabPanel>
           </TabContext>
         </CardContent>
@@ -266,7 +341,7 @@ const SettingsForm = () => {
 const Settings = () => {
   return (
     <SnackbarProvider maxSnack={3}>
-      <SettingsForm />
+      <SettingsForms />
     </SnackbarProvider>
   );
 };
