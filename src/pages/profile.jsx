@@ -49,21 +49,21 @@ const Profile = () => {
               label="Name"
               variant="filled"
               fullWidth
-              value={user?.displayName}
+              value={user?.displayName ?? ""}
             />
 
             <TextField
               label="Username"
               variant="filled"
               fullWidth
-              value={profile?.username}
+              value={profile?.username ?? ""}
             />
 
             <TextField
               label="Bio"
               variant="filled"
               fullWidth
-              value={profile?.bio}
+              value={profile?.bio ?? ""}
               multiline
               rows={4}
             />
@@ -72,7 +72,7 @@ const Profile = () => {
               label="Email"
               variant="filled"
               fullWidth
-              value={user?.email}
+              value={user?.email ?? ""}
             />
           </Stack>
 
