@@ -5,8 +5,12 @@ import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   updatePassword as updatePasswordFirebase,
+  updateProfile as updateProfileFirebase,
+  updateEmail,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
 } from "firebase/auth";
-import { auth, db } from "../config/firebase";
+import { auth, db, storage } from "../config/firebase";
 import {
   collection,
   doc,
@@ -19,6 +23,7 @@ import {
   where,
 } from "firebase/firestore";
 import axios from "axios";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const AuthContext = createContext();
 
@@ -139,6 +144,67 @@ export const AuthContextProvider = ({ children }) => {
     return updated;
   };
 
+  const updateAvatar = async (avatarFile) => {
+    const storageRef = ref(
+      storage,
+      `avatars/${auth.currentUser.uid}/${avatarFile.name}`
+    );
+
+    const avatarRef = (await uploadBytes(storageRef, avatarFile)).ref;
+    const path = await getDownloadURL(avatarRef);
+
+    return path;
+  };
+
+  const updateProfile = async (profile) => {
+    let profileError = null;
+
+    await reauthenticateWithCredential(
+      auth.currentUser,
+      EmailAuthProvider.credential(auth.currentUser.email, profile.password)
+    )
+      .then(async () => {
+        if (auth.currentUser.email !== profile.email)
+          await updateEmail(auth.currentUser, profile.email).catch((error) => {
+            if (
+              error.message === "Firebase: Error (auth/email-already-in-use)."
+            )
+              profileError = "Email already in use!";
+            else profileError = "Failed to change email!";
+          });
+      })
+      .then(async () => {
+        let tempProfile = profile.avatar
+          ? { displayName: profile.name, photoURL: profile.avatar }
+          : { displayName: profile.name };
+
+        await updateProfileFirebase(auth.currentUser, tempProfile)
+          .then(async () => {
+            const userRef = doc(db, "users", auth.currentUser.uid);
+            await updateDoc(userRef, {
+              username: profile.username,
+              bio: profile.bio,
+            }).catch((error) => {
+              profileError = "Failed to update profile correctly!";
+            });
+          })
+          .catch((error) => {
+            profileError = "Failed to update profile correctly!";
+          });
+      })
+      .catch((error) => {
+        if (
+          error.message ===
+          "Firebase: Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later. (auth/too-many-requests)."
+        )
+          profileError =
+            "Access to this account has been temporarily disabled due to many failed login attempts.";
+        else profileError = "Wrong password!";
+      });
+
+    return profileError;
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -173,6 +239,8 @@ export const AuthContextProvider = ({ children }) => {
         profile,
         updateSettings,
         updatePassword,
+        updateAvatar,
+        updateProfile,
       }}
     >
       {children}

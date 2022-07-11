@@ -97,7 +97,6 @@ const SettingsForms = () => {
         values.currentPassword,
         values.newPassword
       );
-      console.log(done);
       if (done)
         enqueueSnackbar("Password updated successfully!", {
           variant: "success",
