@@ -12,6 +12,7 @@ import Register from "./pages/auth/register";
 import Dashboard from "./pages/dashboard";
 import Profile from "./pages/profile";
 import Settings from "./pages/settings";
+import PublicProfile from "./pages/public-profile";
 
 const App = () => (
   <AuthContextProvider>
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/settings" element={<Settings />}></Route>
           </Route>
         </Route>
+        <Route path=":username" element={<PublicProfile />} />
       </Routes>
     </BrowserRouter>
   </AuthContextProvider>
