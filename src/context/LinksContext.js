@@ -10,13 +10,17 @@ import {
   Timestamp,
   deleteDoc,
   orderBy,
+  where,
 } from "firebase/firestore";
+import { useAuth } from "./AuthContext";
 
 const LinksContext = createContext();
 
 export const LinksContextProvider = ({ children }) => {
   const [links, setLinks] = useState([]);
   const [publicLinks, setPublicLinks] = useState([]);
+
+  const { user } = useAuth();
 
   const addEmptyLink = async () => {
     await addDoc(collection(db, "links"), {
@@ -25,6 +29,7 @@ export const LinksContextProvider = ({ children }) => {
       views: 0,
       isVisible: false,
       createdAt: Timestamp.now(),
+      user_id: user.uid,
     });
   };
 
@@ -38,7 +43,11 @@ export const LinksContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const q = query(collection(db, "links"), orderBy("createdAt"));
+    const q = query(
+      collection(db, "links"),
+      where("user_id", "==", user.uid),
+      orderBy("createdAt")
+    );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       setLinks([]);
       setPublicLinks([]);
@@ -59,7 +68,7 @@ export const LinksContextProvider = ({ children }) => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [user.uid]);
 
   return (
     <LinksContext.Provider
