@@ -34,10 +34,16 @@ const PublicProfile = () => {
     document.title = profile?.username
       ? `@${profile?.username} | ${SITE_TITLE}`
       : SITE_TITLE;
+
+    console.log(profile);
   }, [profile]);
 
   useEffect(() => {
-    const q = query(collection(db, "users"), where("username", "==", username));
+    const q = query(
+      collection(db, "users"),
+      where("username", "==", username),
+      where("isVisible", "==", true)
+    );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       if (querySnapshot.empty) navigate("/404");
 

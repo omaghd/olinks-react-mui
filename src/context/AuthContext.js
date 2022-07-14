@@ -72,7 +72,7 @@ export const AuthContextProvider = ({ children }) => {
         backgroundColor: "white",
         textColor: "black",
         displayVisits: false,
-        isVisible: false,
+        isVisible: true,
         createdAt: Timestamp.now(),
         userAgent: navigator.userAgent,
         geo,
