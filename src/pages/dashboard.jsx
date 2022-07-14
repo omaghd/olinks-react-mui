@@ -14,6 +14,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useEffect, useState } from "react";
 
 import { SITE_TITLE } from "../config/globalVariables";
+import { useAuth } from "../context/AuthContext";
 
 const FabStyle = {
   bottom: 20,
@@ -22,6 +23,7 @@ const FabStyle = {
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { profile } = useAuth();
 
   useEffect(() => {
     document.title = `My Links | ${SITE_TITLE}`;
@@ -36,13 +38,15 @@ const Dashboard = () => {
           <Stack spacing={2} flex={6}>
             <Links />
           </Stack>
-          <Stack
-            flex={6}
-            alignItems="center"
-            sx={{ display: { xs: "none", md: "flex" } }}
-          >
-            <PreviewLinks />
-          </Stack>
+          {profile && (
+            <Stack
+              flex={6}
+              alignItems="center"
+              sx={{ display: { xs: "none", md: "flex" } }}
+            >
+              <PreviewLinks />
+            </Stack>
+          )}
         </Stack>
 
         <Stack alignItems="center" sx={{ display: { xs: "flex", md: "none" } }}>
