@@ -17,8 +17,9 @@ import { useAuth } from "./AuthContext";
 const LinksContext = createContext();
 
 export const LinksContextProvider = ({ children }) => {
-  const [links, setLinks] = useState([]);
-  const [publicLinks, setPublicLinks] = useState([]);
+  const [links, setLinks] = useState(null);
+  const [publicLinks, setPublicLinks] = useState(null);
+  const [linksAreLoading, setLinksAreLoading] = useState(false);
 
   const { user } = useAuth();
 
@@ -48,6 +49,7 @@ export const LinksContextProvider = ({ children }) => {
       where("user_id", "==", user.uid),
       orderBy("createdAt")
     );
+    setLinksAreLoading(true);
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       setLinks([]);
       setPublicLinks([]);
@@ -63,6 +65,7 @@ export const LinksContextProvider = ({ children }) => {
           ...prevLinks,
         ]);
       });
+      setLinksAreLoading(false);
     });
 
     return () => {
@@ -79,6 +82,7 @@ export const LinksContextProvider = ({ children }) => {
         updateLink,
         deleteLink,
         publicLinks,
+        linksAreLoading,
       }}
     >
       {children}

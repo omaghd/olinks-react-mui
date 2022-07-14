@@ -53,13 +53,14 @@ const PreviewLinks = () => {
       </Stack>
 
       <Stack width="100%" spacing={2}>
-        {publicLinks.map((link) => (
-          <PreviewLink
-            key={link.id}
-            link={link}
-            textColor={profile?.textColor}
-          />
-        ))}
+        {publicLinks &&
+          publicLinks.map((link) => (
+            <PreviewLink
+              key={link.id}
+              link={link}
+              textColor={profile?.textColor}
+            />
+          ))}
       </Stack>
     </Stack>
   );
