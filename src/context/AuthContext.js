@@ -206,15 +206,17 @@ export const AuthContextProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
 
-      const unsubscribe = onSnapshot(
-        doc(db, "users", currentUser.uid),
-        (doc) => {
-          setProfile(doc.data());
-        }
-      );
-      return () => {
-        unsubscribe();
-      };
+      if (currentUser) {
+        const unsubscribe = onSnapshot(
+          doc(db, "users", currentUser.uid),
+          (doc) => {
+            setProfile(doc.data());
+          }
+        );
+        return () => {
+          unsubscribe();
+        };
+      }
     });
     return () => {
       unsubscribe();
