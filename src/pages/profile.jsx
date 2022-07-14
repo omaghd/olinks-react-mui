@@ -26,9 +26,11 @@ const Input = styled("input")({
 });
 
 const ProfileForm = () => {
-  const { profile, user, updateAvatar, updateProfile } = useAuth();
+  const { user, profile, updateAvatar, updateProfile } = useAuth();
 
   const [avatarPreview, setAvatarPreview] = useState(null);
+
+  const [avatarChanged, setAvatarChanged] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -38,6 +40,7 @@ const ProfileForm = () => {
     if (e.target.files[0]) {
       setAvatarPreview(URL.createObjectURL(e.target.files[0]));
       formik.values.avatar = e.target.files[0];
+      setAvatarChanged(true);
     }
   }
 
@@ -61,7 +64,7 @@ const ProfileForm = () => {
   const formik = useFormik({
     initialValues: {
       avatar: null,
-      name: user?.displayName ?? "",
+      name: profile?.displayName ?? "",
       username: profile?.username ?? "",
       bio: profile?.bio ?? "",
       email: user?.email ?? "",
@@ -70,9 +73,10 @@ const ProfileForm = () => {
     validationSchema: validation,
     onSubmit: async (values) => {
       setIsLoading(true);
-      if (values.avatar) {
+      if (values.avatar && avatarChanged) {
         let path = await updateAvatar(values.avatar);
         if (path) values.avatar = path;
+        setAvatarChanged(false);
       }
 
       const profileError = await updateProfile(values);
@@ -117,8 +121,8 @@ const ProfileForm = () => {
             <Stack spacing={2} mb={3}>
               <Box alignSelf="center">
                 <Avatar
-                  alt={user?.displayName ?? profile?.username}
-                  src={avatarPreview ?? user?.photoURL}
+                  alt={profile?.displayName ?? profile?.username}
+                  src={avatarPreview ?? profile?.photoURL}
                   sx={{ width: 150, height: 150 }}
                 />
               </Box>

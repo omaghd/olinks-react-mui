@@ -32,8 +32,8 @@ const PreviewLinks = () => {
       <Stack alignItems="center" justifyContent="center" spacing={1} mb={3}>
         <Avatar
           sx={{ width: 80, height: 80 }}
-          alt={user?.displayName ?? profile?.username}
-          src={user?.photoURL}
+          alt={profile?.displayName ?? profile?.username}
+          src={profile?.photoURL}
         />
 
         <Typography color={profile?.textColor} textAlign="center">

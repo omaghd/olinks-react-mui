@@ -19,7 +19,7 @@ const userItems = [
 const UserMenu = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const { user, logout } = useAuth();
+  const { profile, logout } = useAuth();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -33,8 +33,8 @@ const UserMenu = () => {
     <Box sx={{ flexGrow: 0 }}>
       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
         <Avatar
-          alt={user.displayName}
-          src={user.photoURL}
+          alt={profile?.displayName ?? profile?.username}
+          src={profile?.photoURL}
           sx={{
             width: { xs: 30, sm: 45 },
             height: { xs: 30, sm: 45 },

@@ -5,7 +5,6 @@ import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   updatePassword as updatePasswordFirebase,
-  updateProfile as updateProfileFirebase,
   updateEmail,
   reauthenticateWithCredential,
   EmailAuthProvider,
@@ -156,41 +155,39 @@ export const AuthContextProvider = ({ children }) => {
     return path;
   };
 
-  const updateProfile = async (profile) => {
+  const updateProfile = async (newProfile) => {
     let profileError = null;
 
     await reauthenticateWithCredential(
       auth.currentUser,
-      EmailAuthProvider.credential(auth.currentUser.email, profile.password)
+      EmailAuthProvider.credential(auth.currentUser.email, newProfile.password)
     )
       .then(async () => {
-        if (auth.currentUser.email !== profile.email)
-          await updateEmail(auth.currentUser, profile.email).catch((error) => {
-            if (
-              error.message === "Firebase: Error (auth/email-already-in-use)."
-            )
-              profileError = "Email already in use!";
-            else profileError = "Failed to change email!";
-          });
+        if (auth.currentUser.email !== newProfile.email)
+          await updateEmail(auth.currentUser, newProfile.email).catch(
+            (error) => {
+              if (
+                error.message === "Firebase: Error (auth/email-already-in-use)."
+              )
+                profileError = "Email already in use!";
+              else profileError = "Failed to change email!";
+            }
+          );
       })
       .then(async () => {
-        let tempProfile = profile.avatar
-          ? { displayName: profile.name, photoURL: profile.avatar }
-          : { displayName: profile.name };
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        const tempProfile = {
+          username: newProfile.username,
+          bio: newProfile.bio,
+          displayName: newProfile.name,
+        };
+        const finalProfile = newProfile.avatar
+          ? { ...tempProfile, photoURL: newProfile.avatar }
+          : { ...tempProfile };
 
-        await updateProfileFirebase(auth.currentUser, tempProfile)
-          .then(async () => {
-            const userRef = doc(db, "users", auth.currentUser.uid);
-            await updateDoc(userRef, {
-              username: profile.username,
-              bio: profile.bio,
-            }).catch((error) => {
-              profileError = "Failed to update profile correctly!";
-            });
-          })
-          .catch((error) => {
-            profileError = "Failed to update profile correctly!";
-          });
+        await updateDoc(userRef, finalProfile).catch((error) => {
+          profileError = "Failed to update profile correctly!";
+        });
       })
       .catch((error) => {
         if (
@@ -208,16 +205,9 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
 
-  useEffect(() => {
-    if (auth.currentUser) {
       const unsubscribe = onSnapshot(
-        doc(db, "users", auth.currentUser.uid),
+        doc(db, "users", currentUser.uid),
         (doc) => {
           setProfile(doc.data());
         }
@@ -225,7 +215,10 @@ export const AuthContextProvider = ({ children }) => {
       return () => {
         unsubscribe();
       };
-    }
+    });
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   return (
