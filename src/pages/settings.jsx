@@ -25,12 +25,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import PasswordIcon from "@mui/icons-material/Password";
 
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useFormik } from "formik";
 import * as yup from "yup";
 
 import { SnackbarProvider, useSnackbar } from "notistack";
+
+import { SITE_TITLE } from "../config/globalVariables";
 
 const SettingsForms = () => {
   const { profile, updateSettings, updatePassword } = useAuth();
@@ -141,6 +143,10 @@ const SettingsForms = () => {
       showNewPassword: !values.showNewPassword,
     });
   };
+
+  useEffect(() => {
+    document.title = `Settings | ${SITE_TITLE}`;
+  }, []);
 
   return (
     <Box flex={10} p={1} pb={10}>

@@ -1,9 +1,18 @@
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+
 import { Link } from "react-router-dom";
 
+import { useEffect } from "react";
+
+import { SITE_TITLE } from "../config/globalVariables";
+
 const NotFound = () => {
+  useEffect(() => {
+    document.title = `404 | ${SITE_TITLE}`;
+  }, []);
+
   return (
     <Stack minHeight="100vh" justifyContent="center" alignContent="center">
       <Stack textAlign="center" display="block" mb={10}>

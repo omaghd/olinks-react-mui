@@ -12,7 +12,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styled from "@emotion/styled";
 
@@ -20,6 +20,8 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 
 import { SnackbarProvider, useSnackbar } from "notistack";
+
+import { SITE_TITLE } from "../config/globalVariables";
 
 const Input = styled("input")({
   display: "none",
@@ -103,6 +105,10 @@ const ProfileForm = () => {
       setIsLoading(false);
     },
   });
+
+  useEffect(() => {
+    document.title = `Profile | ${SITE_TITLE}`;
+  }, []);
 
   return (
     <Box flex={10} p={1} pb={10}>

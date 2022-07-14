@@ -21,12 +21,20 @@ import {
   where,
 } from "firebase/firestore";
 
+import { SITE_TITLE } from "../config/globalVariables";
+
 const PublicProfile = () => {
   const [publicLinks, setPublicLinks] = useState([]);
   const [profile, setProfile] = useState(null);
 
   let { username } = useParams();
   let navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = profile?.username
+      ? `@${profile?.username} | ${SITE_TITLE}`
+      : SITE_TITLE;
+  }, [profile]);
 
   useEffect(() => {
     const q = query(collection(db, "users"), where("username", "==", username));

@@ -5,12 +5,15 @@ import Fab from "@mui/material/Fab";
 import NewLinkButton from "../components/NewLinkButton";
 import Links from "../components/Links";
 import PreviewLinks from "../components/PreviewLinks";
+import MobilePreviewLinks from "../components/MobilePreviewLinks";
 
 import { LinksContextProvider } from "../context/LinksContext";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useState } from "react";
-import MobilePreviewLinks from "../components/MobilePreviewLinks";
+
+import { useEffect, useState } from "react";
+
+import { SITE_TITLE } from "../config/globalVariables";
 
 const FabStyle = {
   bottom: 20,
@@ -19,6 +22,10 @@ const FabStyle = {
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    document.title = `My Links | ${SITE_TITLE}`;
+  }, []);
 
   return (
     <LinksContextProvider>

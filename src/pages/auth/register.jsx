@@ -3,12 +3,18 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Grid from "@mui/material/Grid";
+
+import SecondaryLink from "../../components/SecondaryLink";
+
 import { useFormik } from "formik";
 import * as yup from "yup";
-import SecondaryLink from "../../components/SecondaryLink";
+
 import red from "@mui/material/colors/red";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+
+import { SITE_TITLE } from "../../config/globalVariables";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,6 +45,10 @@ const Register = () => {
       setIsLoading(false);
     },
   });
+
+  useEffect(() => {
+    document.title = `Register | ${SITE_TITLE}`;
+  }, []);
 
   return (
     <Grid

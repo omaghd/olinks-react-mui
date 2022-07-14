@@ -3,12 +3,18 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import LoadingButton from "@mui/lab/LoadingButton";
+
+import SecondaryLink from "../../components/SecondaryLink";
+
 import { useFormik } from "formik";
 import * as yup from "yup";
-import SecondaryLink from "../../components/SecondaryLink";
+
 import red from "@mui/material/colors/red";
+
 import { useAuth } from "../../context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { SITE_TITLE } from "../../config/globalVariables";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +41,10 @@ const Login = () => {
       setIsLoading(false);
     },
   });
+
+  useEffect(() => {
+    document.title = `Login | ${SITE_TITLE}`;
+  }, []);
 
   return (
     <Grid
