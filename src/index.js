@@ -1,7 +1,9 @@
-import { onAuthStateChanged } from "firebase/auth";
 import React from "react";
 import ReactDOM from "react-dom/client";
+
 import { auth } from "./config/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+
 import App from "./App";
 
 let root;

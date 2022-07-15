@@ -10,14 +10,18 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { LinksContextProvider } from "../context/LinksContext";
+
 import PreviewLink from "../components/PreviewLink";
 
 import { db } from "../config/firebase";
 import {
   collection,
+  doc,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 
@@ -26,6 +30,7 @@ import { SITE_TITLE } from "../config/globalVariables";
 const PublicProfile = () => {
   const [publicLinks, setPublicLinks] = useState([]);
   const [profile, setProfile] = useState(null);
+  const [profileIsSet, setProfileIsSet] = useState(true);
 
   let { username } = useParams();
   let navigate = useNavigate();
@@ -34,8 +39,6 @@ const PublicProfile = () => {
     document.title = profile?.username
       ? `@${profile?.username} | ${SITE_TITLE}`
       : SITE_TITLE;
-
-    console.log(profile);
   }, [profile]);
 
   useEffect(() => {
@@ -49,13 +52,17 @@ const PublicProfile = () => {
 
       querySnapshot.forEach((profile) => {
         setProfile(profile.data());
+        if (profileIsSet) {
+          incrementProfileVisits(profile.data());
+          setProfileIsSet(false);
+        }
       });
     });
 
     return () => {
       unsubscribe();
     };
-  }, [username, navigate]);
+  }, [username, navigate, profileIsSet]);
 
   useEffect(() => {
     if (profile) {
@@ -82,6 +89,14 @@ const PublicProfile = () => {
     }
   }, [profile]);
 
+  const incrementProfileVisits = async (profile) => {
+    const profileRef = doc(db, "users", profile.uid);
+
+    await updateDoc(profileRef, {
+      visits: profile.visits + 1,
+    });
+  };
+
   return profile ? (
     <Box minHeight="100vh" py={4} bgcolor={profile?.backgroundColor}>
       <Container maxWidth="sm">
@@ -102,7 +117,7 @@ const PublicProfile = () => {
             <Box mb={3}>
               <Chip
                 size="small"
-                label={`0 Views`}
+                label={`${profile?.visits} Views`}
                 variant="outlined"
                 sx={{ color: profile?.textColor }}
               />
@@ -111,13 +126,15 @@ const PublicProfile = () => {
         </Stack>
 
         <Stack spacing={2}>
-          {publicLinks.map((link) => (
-            <PreviewLink
-              key={link.id}
-              link={link}
-              textColor={profile?.textColor}
-            />
-          ))}
+          <LinksContextProvider>
+            {publicLinks.map((link) => (
+              <PreviewLink
+                key={link.id}
+                link={link}
+                textColor={profile?.textColor}
+              />
+            ))}
+          </LinksContextProvider>
         </Stack>
       </Container>
     </Box>

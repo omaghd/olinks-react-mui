@@ -77,6 +77,7 @@ export const AuthContextProvider = ({ children }) => {
         userAgent: navigator.userAgent,
         geo,
         bio: "",
+        visits: 0,
       });
     } catch (e) {
       setErrors((prevError) => [...prevError, e.message]);

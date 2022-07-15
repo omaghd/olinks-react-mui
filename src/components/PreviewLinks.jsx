@@ -44,7 +44,7 @@ const PreviewLinks = () => {
           <Box mb={3}>
             <Chip
               size="small"
-              label={`0 Views`}
+              label={`${profile?.visits} Views`}
               variant="outlined"
               sx={{ color: profile?.textColor }}
             />
