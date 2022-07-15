@@ -1,13 +1,9 @@
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 
-import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useMenu } from "../context/MenuContext";
 
 import { Link } from "react-router-dom";
 
@@ -17,60 +13,27 @@ const userItems = [
 ];
 
 const UserMenu = () => {
-  const [anchorElUser, setAnchorElUser] = useState(null);
+  const { logout } = useAuth();
 
-  const { profile, logout } = useAuth();
-
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const { handleCloseMenu } = useMenu();
 
   return (
-    <Box sx={{ flexGrow: 0 }}>
-      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-        <Avatar
-          alt={profile?.displayName ?? profile?.username}
-          src={profile?.photoURL}
-          sx={{
-            width: { xs: 30, sm: 45 },
-            height: { xs: 30, sm: 45 },
-          }}
-        />
-      </IconButton>
-      <Menu
-        anchorEl={anchorElUser}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        open={Boolean(anchorElUser)}
-        onClose={handleCloseUserMenu}
-      >
-        {userItems.map((item) => (
-          <MenuItem
-            key={item.link}
-            component={Link}
-            to={item.link}
-            onClick={handleCloseUserMenu}
-          >
-            <Typography textAlign="center">{item.name}</Typography>
-          </MenuItem>
-        ))}
-        <Divider />
-        <MenuItem onClick={logout}>
-          <Typography textAlign="center">Logout</Typography>
+    <>
+      {userItems.map((item) => (
+        <MenuItem
+          key={item.link}
+          component={Link}
+          to={item.link}
+          onClick={handleCloseMenu}
+        >
+          <Typography textAlign="center">{item.name}</Typography>
         </MenuItem>
-      </Menu>
-    </Box>
+      ))}
+      <Divider />
+      <MenuItem onClick={logout}>
+        <Typography textAlign="center">Logout</Typography>
+      </MenuItem>
+    </>
   );
 };
 

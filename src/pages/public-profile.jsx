@@ -10,8 +10,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { LinksContextProvider } from "../context/LinksContext";
-
 import PreviewLink from "../components/PreviewLink";
 
 import { db } from "../config/firebase";
@@ -126,15 +124,13 @@ const PublicProfile = () => {
         </Stack>
 
         <Stack spacing={2}>
-          <LinksContextProvider>
-            {publicLinks.map((link) => (
-              <PreviewLink
-                key={link.id}
-                link={link}
-                textColor={profile?.textColor}
-              />
-            ))}
-          </LinksContextProvider>
+          {publicLinks.map((link) => (
+            <PreviewLink
+              key={link.id}
+              link={link}
+              textColor={profile?.textColor}
+            />
+          ))}
         </Stack>
       </Container>
     </Box>

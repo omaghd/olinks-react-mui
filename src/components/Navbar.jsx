@@ -2,24 +2,24 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { Link } from "react-router-dom";
-
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
+import { MenuContextProvider } from "../context/MenuContext";
+
 import MobileSidebar from "./MobileSidebar";
+import Menu from "./Menu";
 import UserMenu from "./UserMenu";
+import VisitorMenu from "./VisitorMenu";
 
 const Navbar = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
 
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -47,25 +47,15 @@ const Navbar = () => {
           >
             OLinks
           </Typography>
-          <Stack direction="row" spacing={1}>
-            {user ? (
-              <UserMenu />
-            ) : (
-              <>
-                <Button
-                  component={Link}
-                  variant="outlined"
-                  color="inherit"
-                  to="/login"
-                >
-                  Login
-                </Button>
-                <Button component={Link} color="inherit" to="/register">
-                  Register
-                </Button>
-              </>
-            )}
-          </Stack>
+
+          <MenuContextProvider>
+            <Menu
+              altAvatar={user ? profile?.username : ""}
+              srcAvatar={user ? profile?.photoURL : ""}
+            >
+              {user ? <UserMenu /> : <VisitorMenu />}
+            </Menu>
+          </MenuContextProvider>
         </Toolbar>
       </AppBar>
     </Box>

@@ -3,7 +3,8 @@ import Button from "@mui/material/Button";
 
 import styled from "@emotion/styled";
 
-import { useLinks } from "../context/LinksContext";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../config/firebase";
 
 const Link = styled(Button)((props) => ({
   borderColor: props.border,
@@ -17,7 +18,10 @@ const Link = styled(Button)((props) => ({
 }));
 
 const PreviewLink = ({ link, textColor }) => {
-  const { updateLink } = useLinks();
+  const updateLink = async (link) => {
+    const linkRef = doc(db, "links", link.id);
+    await updateDoc(linkRef, link);
+  };
 
   const incrementViews = async () => {
     await updateLink({ ...link, views: link.views + 1 });
