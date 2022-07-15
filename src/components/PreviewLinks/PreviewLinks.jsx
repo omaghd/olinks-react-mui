@@ -55,6 +55,12 @@ const PreviewLinks = () => {
             {user?.displayName ? user?.displayName : `@${profile?.username}`}
           </Typography>
 
+          {profile?.bio && (
+            <Typography color={profile?.textColor} textAlign="center">
+              profile?.bio
+            </Typography>
+          )}
+
           {profile?.displayVisits && (
             <Box mb={3}>
               <Chip
