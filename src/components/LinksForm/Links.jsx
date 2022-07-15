@@ -8,13 +8,13 @@ const Links = () => {
   const { links, linksAreLoading } = useLinks();
 
   return linksAreLoading ? (
-    <Grid container justifyContent="center" mt={10}>
+    <Grid container justifyContent="center" my={10}>
       <CircularProgress size={150} />
     </Grid>
   ) : links && links.length ? (
     links.map((link) => <LinkForm key={link.id} link={link} />)
   ) : (
-    <Grid container justifyContent="center" mt={10}>
+    <Grid container justifyContent="center" my={10}>
       <Typography fontSize={30}>NO LINKS</Typography>
     </Grid>
   );

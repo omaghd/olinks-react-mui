@@ -34,19 +34,18 @@ export const AuthContextProvider = ({ children }) => {
   const signup = async (username, email, password) => {
     setErrors([]);
 
-    await checkUsername(username);
-
-    try {
-      let data = await createUserWithEmailAndPassword(auth, email, password);
-      if (!data) throw new Error("Could not complete the signup");
-      await addUserDoc(data.user, username);
-    } catch (e) {
-      if (e.message === "Firebase: Error (auth/email-already-in-use).")
-        setErrors((prevError) => [
-          ...prevError,
-          "This email is already in use!",
-        ]);
-    }
+    if (await checkUsername(username))
+      try {
+        let data = await createUserWithEmailAndPassword(auth, email, password);
+        if (!data) throw new Error("Could not complete the signup");
+        await addUserDoc(data.user, username);
+      } catch (e) {
+        if (e.message === "Firebase: Error (auth/email-already-in-use).")
+          setErrors((prevError) => [
+            ...prevError,
+            "This email is already in use!",
+          ]);
+      }
   };
 
   const checkUsername = async (username) => {
@@ -58,6 +57,8 @@ export const AuthContextProvider = ({ children }) => {
       const users = await getDocs(q);
       if (users.docs.length > 0)
         throw new Error("This username already exists!");
+
+      return true;
     } catch (e) {
       setErrors((prevError) => [...prevError, e.message]);
     }
@@ -104,6 +105,8 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const logout = () => {
+    setUser(null);
+    setProfile(null);
     return signOut(auth);
   };
 

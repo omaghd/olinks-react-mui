@@ -140,6 +140,8 @@ const PublicProfile = () => {
       minHeight="100vh"
       justifyContent="center"
       alignContent="center"
+      bgcolor={"background.default"}
+      color={"text.primary"}
     >
       <CircularProgress size={150} />
     </Grid>
