@@ -1,5 +1,9 @@
+import Box from "@mui/material/Box";
+
 import { Navigate, Outlet } from "react-router-dom";
+
 import Navbar from "../components/Navbar";
+
 import { useAuth } from "../context/AuthContext";
 
 const AuthLayout = () => {
@@ -8,10 +12,17 @@ const AuthLayout = () => {
   if (user) return <Navigate to="/dashboard" replace={true} />;
 
   return (
-    <>
+    <Box
+      bgcolor={"background.default"}
+      color={"text.primary"}
+      sx={{ minHeight: "100vh" }}
+    >
       <Navbar />
-      <Outlet />
-    </>
+
+      <Box sx={{ paddingTop: "50px" }}>
+        <Outlet />
+      </Box>
+    </Box>
   );
 };
 

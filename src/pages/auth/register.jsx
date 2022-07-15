@@ -51,12 +51,7 @@ const Register = () => {
   }, []);
 
   return (
-    <Grid
-      direction="column"
-      container
-      alignItems="center"
-      sx={{ marginTop: "30px", marginBottom: "30px" }}
-    >
+    <Grid direction="column" container alignItems="center">
       <Grid sx={{ width: { xs: 300, sm: 400 } }}>
         <Typography
           textAlign="center"

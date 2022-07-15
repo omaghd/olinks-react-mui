@@ -25,7 +25,12 @@ const Sidebar = () => {
   const { logout } = useAuth();
 
   return (
-    <Box flex={2} sx={{ display: { xs: "none", sm: "block" } }}>
+    <Box
+      flex={2}
+      sx={{ display: { xs: "none", sm: "block" } }}
+      bgcolor={"background.default"}
+      color={"text.primary"}
+    >
       <List>
         {userItems.map((item) => (
           <ListItem key={item.name} disablePadding>

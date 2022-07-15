@@ -1,3 +1,5 @@
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Fab from "@mui/material/Fab";
@@ -31,38 +33,51 @@ const Dashboard = () => {
 
   return (
     <LinksContextProvider>
-      <Box flex={10} p={1} pb={10}>
-        <NewLinkButton />
+      <Box
+        flex={10}
+        p={1}
+        pb={10}
+        bgcolor={"background.default"}
+        color={"text.primary"}
+      >
+        <Card>
+          <CardContent>
+            <NewLinkButton />
 
-        <Stack direction="row" spacing={3}>
-          <Stack spacing={2} flex={6}>
-            <Links />
-          </Stack>
-          {profile && (
-            <Stack
-              flex={6}
-              alignItems="center"
-              sx={{ display: { xs: "none", md: "flex" } }}
-            >
-              <PreviewLinks />
+            <Stack direction="row" spacing={3}>
+              <Stack spacing={2} flex={6}>
+                <Links />
+              </Stack>
+              {profile && (
+                <Stack
+                  flex={6}
+                  alignItems="center"
+                  sx={{ display: { xs: "none", md: "flex" } }}
+                >
+                  <PreviewLinks />
+                </Stack>
+              )}
             </Stack>
-          )}
-        </Stack>
 
-        <Stack alignItems="center" sx={{ display: { xs: "flex", md: "none" } }}>
-          <Fab
-            variant="extended"
-            size="small"
-            color="primary"
-            style={FabStyle}
-            onClick={() => setIsOpen(true)}
-          >
-            <VisibilityIcon sx={{ mr: 1 }} />
-            Preview
-          </Fab>
-        </Stack>
+            <Stack
+              alignItems="center"
+              sx={{ display: { xs: "flex", md: "none" } }}
+            >
+              <Fab
+                variant="extended"
+                size="small"
+                color="primary"
+                style={FabStyle}
+                onClick={() => setIsOpen(true)}
+              >
+                <VisibilityIcon sx={{ mr: 1 }} />
+                Preview
+              </Fab>
+            </Stack>
 
-        <MobilePreviewLinks isOpen={isOpen} setIsOpen={setIsOpen} />
+            <MobilePreviewLinks isOpen={isOpen} setIsOpen={setIsOpen} />
+          </CardContent>
+        </Card>
       </Box>
     </LinksContextProvider>
   );

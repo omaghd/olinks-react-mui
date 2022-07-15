@@ -6,13 +6,17 @@ import { onAuthStateChanged } from "firebase/auth";
 
 import App from "./App";
 
+import { ModeContextProvider } from "./context/ModeContext";
+
 let root;
 onAuthStateChanged(auth, (_user) => {
   if (!root) {
     root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(
       <React.StrictMode>
-        <App />
+        <ModeContextProvider>
+          <App />
+        </ModeContextProvider>
       </React.StrictMode>
     );
   }

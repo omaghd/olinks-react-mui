@@ -3,11 +3,16 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 
 import MenuIcon from "@mui/icons-material/Menu";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useMode } from "../context/ModeContext";
 
 import { MenuContextProvider } from "../context/MenuContext";
 
@@ -21,6 +26,8 @@ const Navbar = () => {
 
   const { user, profile } = useAuth();
 
+  const { mode, toggleMode } = useMode();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <MobileSidebar
@@ -28,13 +35,13 @@ const Navbar = () => {
         setOpenSidebar={setOpenSidebar}
       />
 
-      <AppBar position="static">
+      <AppBar position="relative">
         <Toolbar>
           {user && (
             <IconButton
               onClick={() => setOpenSidebar(true)}
               color="inherit"
-              sx={{ display: { xs: "block", sm: "none" } }}
+              sx={{ display: { xs: "flex", sm: "none" } }}
             >
               <MenuIcon />
             </IconButton>
@@ -48,14 +55,27 @@ const Navbar = () => {
             OLinks
           </Typography>
 
-          <MenuContextProvider>
-            <Menu
-              altAvatar={user ? profile?.username : ""}
-              srcAvatar={user ? profile?.photoURL : ""}
-            >
-              {user ? <UserMenu /> : <VisitorMenu />}
-            </Menu>
-          </MenuContextProvider>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <MenuContextProvider>
+              <Menu
+                altAvatar={user ? profile?.username : ""}
+                srcAvatar={user ? profile?.photoURL : ""}
+              >
+                {user ? <UserMenu /> : <VisitorMenu />}
+              </Menu>
+            </MenuContextProvider>
+            <IconButton onClick={toggleMode}>
+              {mode === "light" ? (
+                <Tooltip title="Dark">
+                  <DarkModeIcon />
+                </Tooltip>
+              ) : (
+                <Tooltip title="Light">
+                  <LightModeIcon />
+                </Tooltip>
+              )}
+            </IconButton>
+          </Stack>
         </Toolbar>
       </AppBar>
     </Box>
