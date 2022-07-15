@@ -19,7 +19,7 @@ import { SITE_TITLE } from "../../config/globalVariables";
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login, errors } = useAuth();
+  const { login, errors, setErrors } = useAuth();
 
   const validationSchema = yup.object({
     email: yup
@@ -44,7 +44,8 @@ const Login = () => {
 
   useEffect(() => {
     document.title = `Login | ${SITE_TITLE}`;
-  }, []);
+    setErrors([]);
+  }, [setErrors]);
 
   return (
     <Grid direction="column" container alignItems="center">

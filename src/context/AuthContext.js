@@ -240,6 +240,7 @@ export const AuthContextProvider = ({ children }) => {
         updatePassword,
         updateAvatar,
         updateProfile,
+        setErrors,
       }}
     >
       {children}
