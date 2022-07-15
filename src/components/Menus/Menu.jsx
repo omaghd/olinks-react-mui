@@ -3,7 +3,7 @@ import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import MUIMenu from "@mui/material/Menu";
 
-import { useMenu } from "../context/MenuContext";
+import { useMenu } from "../../context/MenuContext";
 
 const Menu = ({ children, altAvatar, srcAvatar }) => {
   const { anchorElUser, setAnchorElUser, handleCloseMenu } = useMenu();

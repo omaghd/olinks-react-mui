@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
-import PreviewLinks from "../components/PreviewLinks";
+import PreviewLinks from "./PreviewLinks";
 
 import CloseIcon from "@mui/icons-material/Close";
 

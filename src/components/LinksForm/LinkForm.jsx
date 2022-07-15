@@ -17,7 +17,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import styled from "@emotion/styled";
 
 import { useEffect, useRef } from "react";
-import { useLinks } from "../context/LinksContext";
+import { useLinks } from "../../context/LinksContext";
 
 const CardHeader = styled(Stack)({
   flexDirection: "row",

@@ -11,15 +11,15 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { useMode } from "../context/ModeContext";
+import { useAuth } from "../../context/AuthContext";
+import { useMode } from "../../context/ModeContext";
 
-import { MenuContextProvider } from "../context/MenuContext";
+import { MenuContextProvider } from "../../context/MenuContext";
 
-import MobileSidebar from "./MobileSidebar";
-import Menu from "./Menu";
-import UserMenu from "./UserMenu";
-import VisitorMenu from "./VisitorMenu";
+import MobileSidebar from "./Sidebar/MobileSidebar";
+import Menu from "../Menus/Menu";
+import UserMenu from "../Menus/UserMenu";
+import VisitorMenu from "../Menus/VisitorMenu";
 
 const Navbar = () => {
   const [openSidebar, setOpenSidebar] = useState(false);

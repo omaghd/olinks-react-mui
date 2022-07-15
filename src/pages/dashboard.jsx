@@ -4,10 +4,10 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Fab from "@mui/material/Fab";
 
-import NewLinkButton from "../components/NewLinkButton";
-import Links from "../components/Links";
-import PreviewLinks from "../components/PreviewLinks";
-import MobilePreviewLinks from "../components/MobilePreviewLinks";
+import NewLinkButton from "../components/LinksForm/NewLinkButton";
+import Links from "../components/LinksForm/Links";
+import PreviewLinks from "../components/PreviewLinks/PreviewLinks";
+import MobilePreviewLinks from "../components/PreviewLinks/MobilePreviewLinks";
 
 import { LinksContextProvider } from "../context/LinksContext";
 

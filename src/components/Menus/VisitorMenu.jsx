@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 
 import { Link } from "react-router-dom";
 
-import { useMenu } from "../context/MenuContext";
+import { useMenu } from "../../context/MenuContext";
 
 const userItems = [
   { name: "Login", link: "/login" },

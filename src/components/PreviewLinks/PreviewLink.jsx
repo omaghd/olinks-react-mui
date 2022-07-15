@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import styled from "@emotion/styled";
 
 import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../config/firebase";
+import { db } from "../../config/firebase";
 
 const Link = styled(Button)((props) => ({
   borderColor: props.border,

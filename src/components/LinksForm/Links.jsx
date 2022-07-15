@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { useLinks } from "../context/LinksContext";
+import { useLinks } from "../../context/LinksContext";
 import LinkForm from "./LinkForm";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";

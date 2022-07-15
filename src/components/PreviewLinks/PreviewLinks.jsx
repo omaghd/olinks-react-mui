@@ -4,12 +4,12 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 
-import { useAuth } from "../context/AuthContext";
-import { useLinks } from "../context/LinksContext";
+import { useAuth } from "../../context/AuthContext";
+import { useLinks } from "../../context/LinksContext";
 
 import PreviewLink from "./PreviewLink";
 
-import "../assets/css/PreviewLinks.css";
+import "../../assets/css/PreviewLinks.css";
 
 const PreviewLinks = () => {
   const { user, profile } = useAuth();

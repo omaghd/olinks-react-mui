@@ -2,7 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { AuthContextProvider } from "./context/AuthContext";
 
-import RequireAuth from "./components/RequireAuth";
+import RequireAuth from "./components/Layout/RequireAuth";
 
 import AuthLayout from "./layout/AuthLayout";
 import DashboardLayout from "./layout/DashboardLayout";

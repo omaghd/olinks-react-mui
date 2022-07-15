@@ -10,7 +10,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import PreviewLink from "../components/PreviewLink";
+import PreviewLink from "../components/PreviewLinks/PreviewLink";
 
 import { db } from "../config/firebase";
 import {

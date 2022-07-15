@@ -2,8 +2,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 
-import { useAuth } from "../context/AuthContext";
-import { useMenu } from "../context/MenuContext";
+import { useAuth } from "../../context/AuthContext";
+import { useMenu } from "../../context/MenuContext";
 
 import { Link } from "react-router-dom";
 
