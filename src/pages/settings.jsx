@@ -199,6 +199,7 @@ const SettingsForms = () => {
                   </FormGroup>
 
                   <TextField
+                    size="small"
                     label="Text Color"
                     variant="filled"
                     fullWidth
@@ -216,6 +217,7 @@ const SettingsForms = () => {
                   />
 
                   <TextField
+                    size="small"
                     label="Background Color"
                     variant="filled"
                     fullWidth
@@ -250,10 +252,11 @@ const SettingsForms = () => {
               <form onSubmit={formikPassword.handleSubmit}>
                 <Stack spacing={2} mb={3}>
                   <FormControl variant="outlined">
-                    <InputLabel htmlFor="current-password">
+                    <InputLabel htmlFor="current-password" size="small">
                       Current Password
                     </InputLabel>
                     <OutlinedInput
+                      size="small"
                       fullWidth
                       id="current-password"
                       type={values.showCurrentPassword ? "text" : "password"}
@@ -288,8 +291,11 @@ const SettingsForms = () => {
                   </FormControl>
 
                   <FormControl variant="outlined">
-                    <InputLabel htmlFor="new-password">New Password</InputLabel>
+                    <InputLabel htmlFor="new-password" size="small">
+                      New Password
+                    </InputLabel>
                     <OutlinedInput
+                      size="small"
                       fullWidth
                       id="new-password"
                       type={values.showNewPassword ? "text" : "password"}

@@ -151,6 +151,7 @@ const ProfileForm = () => {
               </Box>
 
               <TextField
+                size="small"
                 label="Name"
                 variant="filled"
                 fullWidth
@@ -162,6 +163,7 @@ const ProfileForm = () => {
               />
 
               <TextField
+                size="small"
                 label="Username"
                 variant="filled"
                 fullWidth
@@ -175,6 +177,7 @@ const ProfileForm = () => {
               />
 
               <TextField
+                size="small"
                 label="Bio"
                 variant="filled"
                 fullWidth
@@ -188,6 +191,7 @@ const ProfileForm = () => {
               />
 
               <TextField
+                size="small"
                 label="Email"
                 variant="filled"
                 fullWidth
@@ -199,6 +203,7 @@ const ProfileForm = () => {
               />
 
               <TextField
+                size="small"
                 label="Confirm Password"
                 variant="filled"
                 fullWidth

@@ -17,6 +17,7 @@ const PreviewLink = ({ link, textColor }) => {
   return (
     <Link
       variant="outlined"
+      size="large"
       href={link.url}
       target="_blank"
       text={textColor}

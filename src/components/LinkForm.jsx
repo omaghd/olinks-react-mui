@@ -73,26 +73,30 @@ const LinkForm = ({ link }) => {
   return (
     <Card>
       <CardContent>
-        <Stack spacing={2}>
+        <Stack spacing={1}>
           <CardHeader>
             <Chip
               icon={<VisibilityIcon />}
               label={`${link.views} Views`}
               variant="outlined"
             />
-            <Switch
-              color="success"
-              checked={link.isVisible}
-              onChange={onVisibleChange}
-            />
+            <Tooltip title={link.isVisible ? "Hide" : "Show"}>
+              <Switch
+                color="success"
+                checked={link.isVisible}
+                onChange={onVisibleChange}
+              />
+            </Tooltip>
           </CardHeader>
           <TextField
+            size="small"
             label="Title"
             value={link.title}
             variant="filled"
             onChange={(e) => onTitleChange(e)}
           />
           <TextField
+            size="small"
             label="Link"
             value={link.url}
             variant="filled"
