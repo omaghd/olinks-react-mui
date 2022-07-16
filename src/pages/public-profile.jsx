@@ -6,6 +6,10 @@ import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -96,8 +100,8 @@ const PublicProfile = () => {
   };
 
   return profile ? (
-    <Box minHeight="100vh" py={4} bgcolor={profile?.backgroundColor}>
-      <Container maxWidth="sm">
+    <Box minHeight="100vh" bgcolor={profile?.backgroundColor}>
+      <Container maxWidth="sm" sx={{ py: 4 }}>
         <Stack alignItems="center" justifyContent="center" spacing={1} mb={4}>
           <Avatar
             sx={{ width: 120, height: 120 }}
@@ -139,6 +143,17 @@ const PublicProfile = () => {
           ))}
         </Stack>
       </Container>
+
+      <Stack alignItems="center" py={3}>
+        <Tooltip title="Visit repository" placement="top" arrow>
+          <IconButton
+            href="https://github.com/omaghd/olinks-react-mui"
+            target="_blank"
+          >
+            <GitHubIcon sx={{ color: "black", fontSize: 35 }} />
+          </IconButton>
+        </Tooltip>
+      </Stack>
     </Box>
   ) : (
     <Grid

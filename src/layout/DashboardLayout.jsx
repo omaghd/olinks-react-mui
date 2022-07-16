@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 
 import Navbar from "../components/Layout/Navbar";
 import Sidebar from "../components/Layout/Sidebar/Sidebar";
+import Footer from "../components/Layout/Footer";
 
 const DashboardLayout = () => {
   return (
@@ -18,6 +19,7 @@ const DashboardLayout = () => {
         <Sidebar />
         <Outlet />
       </Stack>
+      <Footer />
     </Box>
   );
 };

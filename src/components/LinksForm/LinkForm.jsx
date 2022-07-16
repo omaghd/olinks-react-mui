@@ -9,8 +9,6 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
 
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
@@ -105,18 +103,7 @@ const LinkForm = ({ link }) => {
         </Stack>
       </CardContent>
       <Actions>
-        <Box>
-          <Tooltip title="Move Up">
-            <IconButton size="large">
-              <ArrowUpwardIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Move Down">
-            <IconButton size="large">
-              <ArrowDownwardIcon />
-            </IconButton>
-          </Tooltip>
-        </Box>
+        <Box></Box>
         <Box>
           <Tooltip title="Delete">
             <IconButton size="large" onClick={() => deleteLink(link)}>

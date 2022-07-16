@@ -111,7 +111,7 @@ const ProfileForm = () => {
   }, []);
 
   return (
-    <Box flex={10} p={1} pb={10}>
+    <Box flex={10} p={1}>
       <Card>
         <CardContent sx={{ width: { xs: "auto", md: 500 } }}>
           <Typography

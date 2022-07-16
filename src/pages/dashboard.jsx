@@ -36,7 +36,6 @@ const Dashboard = () => {
       <Box
         flex={10}
         p={1}
-        pb={10}
         bgcolor={"background.default"}
         color={"text.primary"}
       >

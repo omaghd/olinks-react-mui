@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import { Navigate, Outlet } from "react-router-dom";
 
 import Navbar from "../components/Layout/Navbar";
+import Footer from "../components/Layout/Footer";
 
 import { useAuth } from "../context/AuthContext";
 
@@ -21,6 +22,10 @@ const AuthLayout = () => {
 
       <Box sx={{ paddingTop: "50px" }}>
         <Outlet />
+      </Box>
+
+      <Box sx={{ paddingTop: "50px" }}>
+        <Footer />
       </Box>
     </Box>
   );
