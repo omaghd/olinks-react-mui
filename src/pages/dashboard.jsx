@@ -19,7 +19,8 @@ import { SITE_TITLE } from "../config/globalVariables";
 import { useAuth } from "../context/AuthContext";
 
 const FabStyle = {
-  bottom: 20,
+  bottom: 50,
+  left: 10,
   position: "fixed",
 };
 
